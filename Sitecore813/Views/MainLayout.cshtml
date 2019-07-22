@@ -1,0 +1,228 @@
+﻿@using Sitecore.Mvc
+@using Sitecore.Data.Fields
+<p>Anji Main layout</p>
+<p>Render title</p>
+<p>Render Partial View ViewPage1</p>
+@Html.Partial("~/Views/ViewPage1.cshtml");
+@{
+    Sitecore.Data.Database master = Sitecore.Configuration.Factory.GetDatabase("master");
+    Sitecore.Data.Items.Item home = master.GetItem("/sitecore/content/Home");
+
+    <p>Render title</p>
+    string titleVariabe = home.Fields["Title"].ToString();
+    <p>@titleVariabe</p>
+    <p>Render Text</p>
+    string Textvarible = home.Fields["Text"].ToString();
+    <p>@Textvarible</p>
+    <p>Render FirstName</p>
+    string firstnamevarible = home.Fields["FirstName"].ToString();
+    <p>@firstnamevarible</p>
+    <p>Render LastName</p>
+    string lastnamevarible = home.Fields["LastName"].ToString();
+    <p>@lastnamevarible</p>
+    <p>Render Age</p>
+    string agevarible = home.Fields["Age"].ToString();
+    <p>@agevarible</p>
+    <p>Render MultiList</p>
+    Sitecore.Data.Fields.MultilistField multiselectField = home.Fields["country"];
+    if (multiselectField == null)
+    {
+        //TODO: handle case that field does not exist
+    }
+    else
+    {
+        Sitecore.Data.Items.Item[] items = multiselectField.GetItems();
+        foreach (var item in items)
+        {
+            <p>@item.DisplayName</p>
+            <p>@item.ID</p>
+            <p>@item.TemplateName</p>
+        }
+
+    }
+    Sitecore.Data.Fields.CheckboxField checkboxitem = home.Fields["checkboxfield"];
+    if (checkboxitem != null && checkboxitem.Checked)
+    {
+        //TODO: handle case that checkbox exists and is selected
+        <p>checkboxfield is checked</p>
+
+    }
+    else
+    {
+        <p>checkboxfield is not checked </p>
+    }
+    Sitecore.Data.Fields.ReferenceField Genderitem = home.Fields["Gender"];
+    if (Genderitem != null)
+    {
+        //TODO: handle case that field does not exist
+        <p>Genderitem is Male</p>
+    }
+    else
+    {
+        //TODO: handle case that user has not selected an item
+        <p>Genderitem is FeMale</p>
+    }
+
+
+
+    Sitecore.Data.Fields.ImageField imageField = home.Fields["Image"];
+    if (imageField != null && imageField.MediaItem != null)
+    {
+        Sitecore.Data.Items.MediaItem image =
+        new Sitecore.Data.Items.MediaItem(imageField.MediaItem);
+        string src = Sitecore.StringUtil.EnsurePrefix('/',
+        Sitecore.Resources.Media.MediaManager.GetMediaUrl(image));
+        string imgTag = String.Format(@"<img src=""{0}"" alt=""{1}"" />", src, image.Alt);
+        imgTag = imgTag.Replace(".ashx", "");
+        @imgTag
+        <img src="@src" alt="@imageField.Alt" height="@imageField.Height" width="@imageField.Width" />
+    }
+
+    Sitecore.Data.Fields.ImageField imageField2 = home.Fields["Image2"];
+    if (imageField2 != null && imageField2.MediaItem != null)
+    {
+        Sitecore.Data.Items.MediaItem image =
+        new Sitecore.Data.Items.MediaItem(imageField2.MediaItem);
+        string src = Sitecore.StringUtil.EnsurePrefix('/',
+        Sitecore.Resources.Media.MediaManager.GetMediaUrl(image));
+        string imgTag = String.Format(@"<img src=""{0}"" alt=""{1}"" />", src, image.Alt);
+        imgTag = imgTag.Replace(".ashx", "");
+        @imgTag
+        <img src="@src" alt="@imageField2.Alt" height="@imageField2.Height" width="@imageField2 .Width" />
+
+    }
+
+    <p>Render Datetime2</p>
+
+    Sitecore.Data.Fields.DateField dateTimeField = home.Fields["Datetime2"];
+    string dateTimeString = dateTimeField.Value;
+    DateTime dateTimeStruct = Sitecore.DateUtil.IsoDateToDateTime(dateTimeString);
+    <p>@dateTimeStruct</p>
+    Sitecore.Data.Fields.FileField fileField = home.Fields["FileItem"];
+    Sitecore.Data.Items.Item file = fileField.MediaItem;
+    Sitecore.Data.Items.Item sample = master.GetItem("/ sitecore / MediaLibrary / Files/Anjaneyulu Resume 25th OCT ");
+    if (fileField == null)
+    {
+        //TODO: handle case that field does not exist
+    }
+    else if (file == null)
+    {
+        //TODO: handle case that user has not selected a file
+    }
+    else
+    {
+        Sitecore.Data.Items.MediaItem media = new Sitecore.Data.Items.MediaItem(file);
+        //TODO: process media
+        <p>FileItem is Uploaded</p>
+    }
+
+    Sitecore.Data.Items.Item tiffinFolder = master.GetItem("/sitecore/content/Home/Tiffen Folder");
+    Sitecore.Collections.ChildList tiffinList = tiffinFolder.Children;
+    foreach (Sitecore.Data.Items.Item item in tiffinList)
+    {
+        <p>TiffinName :</p>@item.Fields["Name"].ToString();
+        <p>Price : </p>@item.Fields["Price"].ToString();
+        Sitecore.Data.Fields.ImageField imagefield = item.Fields["Image"];
+        if (imagefield != null && imagefield.MediaItem != null)
+        {
+            Sitecore.Data.Items.MediaItem image =
+            new Sitecore.Data.Items.MediaItem(imagefield.MediaItem);
+            string src = Sitecore.StringUtil.EnsurePrefix('/',
+            Sitecore.Resources.Media.MediaManager.GetMediaUrl(image));
+            string imgTag = String.Format(@" <img src="" {0}"" alt="" {1}"" />", src, image.Alt);
+            imgTag = imgTag.Replace(".ashx", "");
+            @imgTag
+            <img src="@src" alt="@imagefield.Alt" height="@imagefield.Height" width="@imagefield.Width" />
+        }
+    }
+
+    Sitecore.Data.Items.Item articleFolder = master.GetItem("/sitecore/content/Home/Articles");
+    Sitecore.Collections.ChildList articleList = articleFolder.Children;
+    foreach (Sitecore.Data.Items.Item item in articleList)
+    {
+
+        <p>Titile :</p>@item.Fields["Title"].ToString();
+        <p>Description :</p>@item.Fields["Description"].ToString();
+    }
+
+    Sitecore.Data.Items.Item aadharFolder = master.GetItem("/sitecore/content/Home/Aadharcard/AadharcardTemplate");
+    Sitecore.Collections.ChildList aadharList = aadharFolder.Children;
+
+
+    foreach (Sitecore.Data.Items.Item item in aadharList)
+    {
+        <p>Aadharcard Details</p>
+        <p>AadharName :</p>@item.Fields["AadharName"].ToString();
+        <p>AadharID : </p>@item.Fields["AadharID"].ToString();
+        <p>PersonDOB : </p>@item.Fields["PersonDOB"].ToString();
+        <p>Gender:</p>@item.Fields["Gender"].ToString();
+        <p>Today's DateTime is:@DateTime.Today.ToString()</p>
+
+        Sitecore.Data.Fields.ImageField imagefield = item.Fields["Image"];
+        if (imagefield != null && imagefield.MediaItem != null)
+        {
+            Sitecore.Data.Items.MediaItem image =
+            new Sitecore.Data.Items.MediaItem(imagefield.MediaItem);
+            string src = Sitecore.StringUtil.EnsurePrefix('/',
+            Sitecore.Resources.Media.MediaManager.GetMediaUrl(image));
+            string imgTag = String.Format(@" <img src="" {0}"" alt="" {1}"" />", src, image.Alt);
+            imgTag = imgTag.Replace(".ashx", "");
+            @imgTag
+            <img src="@src" alt="@imagefield.Alt" height="@imagefield.Height" width="@imagefield.Width" />
+        }
+    }
+    //Access the Children of an Item
+
+    Sitecore.Data.Database master1 = Sitecore.Configuration.Factory.GetDatabase("master");
+    Sitecore.Data.Items.Item home1 = master.GetItem("/sitecore/content/home");
+    foreach (Sitecore.Data.Items.Item child in home.Children)
+    {
+        //TODO: process child
+        //<p>Today's DateTime is:@DateTime.Today.ToString()</p>
+        <p>TiffensTemplate List:@child.Access.ToString()</p>
+    }
+
+    Sitecore.Data.Items.Item BitechFolder = master.GetItem("/sitecore/content/Home/Bitech Books ");
+    Sitecore.Collections.ChildList BitechList = BitechFolder.Children;
+
+    foreach (Sitecore.Data.Items.Item item in BitechList)
+    {
+        <p>Book Name :</p>@item.Fields["Book Name"].ToString();
+        <p>Book Author Name :</p>@item.Fields["Book Author Name"].ToString();
+        <p>Price :</p>@item.Fields["Price"].ToString();
+        Sitecore.Data.Fields.MultilistField treelistField = home.Fields["Treelist"];
+        if (treelistField == null)
+        {
+            //TODO: handle case that field does not exist
+        }
+        else
+        {
+            Sitecore.Data.Items.Item[] items = treelistField.GetItems();
+            if (items != null && items.Length > 0)
+            {
+                for (int i = 0; i < items.Length; i++)
+                {
+                    //process items[i]
+                    <p>@item.DisplayName</p>
+
+                }
+            }
+        }
+
+        Sitecore.Data.Fields.ImageField imagefield = item.Fields["Book Image"];
+        if (imagefield != null && imagefield.MediaItem != null)
+        {
+            Sitecore.Data.Items.MediaItem image =
+            new Sitecore.Data.Items.MediaItem(imagefield.MediaItem);
+            string src = Sitecore.StringUtil.EnsurePrefix('/',
+            Sitecore.Resources.Media.MediaManager.GetMediaUrl(image));
+            string imgTag = String.Format(@" <img src="" {0}"" alt="" {1}"" />", src, image.Alt);
+            imgTag = imgTag.Replace(".ashx", "");
+            @imgTag
+            <img src="@src" alt="@imagefield.Alt" height="@imagefield.Height" width="@imagefield.Width" />
+        }
+    }
+}
+
+
+

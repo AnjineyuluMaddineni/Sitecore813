@@ -1,0 +1,96 @@
+﻿<h3>Correspondence.cshtml Started</h3>
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style> 
+</head>
+<body>
+    
+    <h2>HTML Table with Dynamic Data From Sitecore</h2>
+    @{
+        Sitecore.Data.Database master = Sitecore.Configuration.Factory.GetDatabase("master");
+        Sitecore.Data.Items.Item correspondence = master.GetItem("/sitecore/content/Auth/Home/Billing and Payment History/Correspondence");
+        Sitecore.Collections.ChildList correspondanceChildItems = correspondence.Children;
+        <table>
+            <tr>
+                <th>Column 01</th>
+                <th>Column 02</th>
+                <th>Column 03</th>
+                <th>Column 04</th>
+            </tr>
+            @foreach (Sitecore.Data.Items.Item childItem in correspondanceChildItems)
+            {
+                //Rendering All Rows
+                string correspondenceText = childItem.Fields["CorrespondenceText"].ToString();
+                string dateLabel = childItem.Fields["Date Label"].ToString();
+                string subjectLabel = childItem.Fields["Subject Label"].ToString();
+                string deliveryMethodLabel = childItem.Fields["Delivery Method Label"].ToString();
+                <tr>
+                    <td>@correspondenceText</td>
+                    <td>@dateLabel</td>
+                    <td>@subjectLabel</td>
+                    <td>@deliveryMethodLabel</td>
+                </tr>
+            }
+        </table>
+    }
+
+    <h2>HTML Table with Hardcoded Data</h2>
+    <table>
+        <tr>
+            <th>Company</th>
+            <th>Contact</th>
+            <th>Country</th>
+        </tr>
+        <tr>
+            <td>Alfreds Futterkiste</td>
+            <td>Maria Anders</td>
+            <td>Germany</td>
+        </tr>
+        <tr>
+            <td>Centro comercial Moctezuma</td>
+            <td>Francisco Chang</td>
+            <td>Mexico</td>
+        </tr>
+        <tr>
+            <td>Ernst Handel</td>
+            <td>Roland Mendel</td>
+            <td>Austria</td>
+        </tr>
+        <tr>
+            <td>Island Trading</td>
+            <td>Helen Bennett</td>
+            <td>UK</td>
+        </tr>
+        <tr>
+            <td>Laughing Bacchus Winecellars</td>
+            <td>Yoshi Tannamuri</td>
+            <td>Canada</td>
+        </tr>
+        <tr>
+            <td>Magazzini Alimentari Riuniti</td>
+            <td>Giovanni Rovelli</td>
+            <td>Italy</td>
+        </tr>
+    </table>
+
+</body>
+</html>
+<h3>Correspondence.cshtml Ended</h3>
+
